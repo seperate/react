@@ -32,6 +32,8 @@ var onFormSubmit = function onFormSubmit(e) {
   renderForm();
 };
 
+// Bunu da gormek istedim
+
 var renderForm = function renderForm() {
   var appRoot = document.getElementById("app");
 

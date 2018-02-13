@@ -28,6 +28,8 @@ const onFormSubmit = e => {
   renderForm();
 };
 
+// Bunu da gormek istedim
+
 const renderForm = () => {
   const appRoot = document.getElementById("app");
 
