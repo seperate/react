@@ -1,40 +1,35 @@
 "use strict";
 
-console.log("Visibility Toggle Loaded");
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var appRoot = document.getElementById("app");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var isVisible = false;
+var Person = function () {
+    function Person() {
+        var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Anonymous';
+        var age = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-var showData = function showData() {
-  // bu satir degeri oldugunun tersine ceviriyor
-  isVisible = !isVisible;
-  renderApp();
-};
+        _classCallCheck(this, Person);
 
-// && operatoru ile tekil logic karsilastirmalarda faydalanmak daha dogru... 
+        this.name = name;
+        this.age = age;
+    }
 
-var renderApp = function renderApp() {
-  var wicket = React.createElement(
-    "div",
-    null,
-    React.createElement(
-      "h1",
-      null,
-      "Toggle Visibility App"
-    ),
-    React.createElement(
-      "button",
-      { name: "btnVisibility", onClick: showData },
-      isVisible ? "Hide Visibility" : "Show Visibility"
-    ),
-    isVisible && React.createElement(
-      "p",
-      null,
-      "Benden sana yar olmaz"
-    )
-  );
-  ReactDOM.render(wicket, appRoot);
-};
+    _createClass(Person, [{
+        key: "getDescription",
+        value: function getDescription() {
+            return this.name + " is " + this.age + " years old.";
+        }
+    }]);
 
-renderApp();
+    return Person;
+}();
+
+var eyup = new Person("Eyup", 26);
+console.log(eyup.getDescription());
+
+var dilek = new Person("Dilek", 35);
+console.log(dilek.getDescription());
+
+var kubra = new Person();
+console.log(kubra.getDescription());
