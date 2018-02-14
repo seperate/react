@@ -5,22 +5,20 @@ const appRoot = document.getElementById("app");
 let isVisible = false;
 
 const showData = () => {
-    if(isVisible){
-        isVisible = false;
-    }else{
-        console.log(isVisible);
-        isVisible = true;
-    }
+    // bu satir degeri oldugunun tersine ceviriyor
+    isVisible = !isVisible;
     renderApp();
 }
+
+// && operatoru ile tekil logic karsilastirmalarda faydalanmak daha dogru... 
 
 const renderApp = () => {
   const wicket = (
     <div>
       <h1>Toggle Visibility App</h1>
       <button name="btnVisibility" onClick={showData}>{isVisible ? "Hide Visibility" : "Show Visibility"}</button>
-      {isVisible ? <p>Benden sana yar olmaz</p> : ""}
-    </div>
+      {isVisible && ( <p>Benden sana yar olmaz</p> )}  
+      </div>
   );
   ReactDOM.render(wicket, appRoot);
 };

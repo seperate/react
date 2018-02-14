@@ -7,14 +7,12 @@ var appRoot = document.getElementById("app");
 var isVisible = false;
 
 var showData = function showData() {
-  if (isVisible) {
-    isVisible = false;
-  } else {
-    console.log(isVisible);
-    isVisible = true;
-  }
+  // bu satir degeri oldugunun tersine ceviriyor
+  isVisible = !isVisible;
   renderApp();
 };
+
+// && operatoru ile tekil logic karsilastirmalarda faydalanmak daha dogru... 
 
 var renderApp = function renderApp() {
   var wicket = React.createElement(
@@ -30,11 +28,11 @@ var renderApp = function renderApp() {
       { name: "btnVisibility", onClick: showData },
       isVisible ? "Hide Visibility" : "Show Visibility"
     ),
-    isVisible ? React.createElement(
+    isVisible && React.createElement(
       "p",
       null,
       "Benden sana yar olmaz"
-    ) : ""
+    )
   );
   ReactDOM.render(wicket, appRoot);
 };
