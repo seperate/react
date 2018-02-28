@@ -11,16 +11,37 @@ class IndecisionApp extends React.Component {
     };
   }
 
-  handleDeleteOptions() {
-    this.setState(() => ({ options:[] }));
+  // Component ilk yüklendiğinde çağırılıyor
+  componentDidMount() {
+    const json = localStorage.getItem("options");
+    const options = JSON.parse(json);
+    if (options) {
+      // return eden element in name i ile assign edilen parametrenin name i eşitse direk element in adını yazabiliyoruz. 
+      // options : options yerine
+      this.setState(() => ({ options }));
+    }
   }
 
-  handleDeleteOption(optionToRemove){
-    console.log("HBO",optionToRemove);
+  // Component update olduğunda çağırılıyor
+  componentDidUpdate(prevProps, prevState) {
+    const json = JSON.stringify(this.state.options);
+    if (prevState.options.length !== this.state.options.length) {
+      localStorage.setItem("options", json);
+    }
+  }
 
-    this.setState((prevState) => ({
-      options : prevState.options.filter((option) => optionToRemove !== option)
-    }))
+  componentWillUnmount() {}
+
+  handleDeleteOptions() {
+    this.setState(() => ({ options: [] }));
+  }
+
+  handleDeleteOption(optionToRemove) {
+    console.log("HBO", optionToRemove);
+
+    this.setState(prevState => ({
+      options: prevState.options.filter(option => optionToRemove !== option)
+    }));
   }
 
   handlePick() {
@@ -36,7 +57,9 @@ class IndecisionApp extends React.Component {
       return "There is already an option with this item";
     }
 
-    this.setState((prevState) => ({ options: prevState.options.concat(anOption) }));
+    this.setState(prevState => ({
+      options: prevState.options.concat(anOption)
+    }));
   }
 
   render() {
@@ -53,7 +76,7 @@ class IndecisionApp extends React.Component {
         <Options
           options={this.state.options}
           handleDeleteOptions={this.handleDeleteOptions}
-          handleDeleteOption = {this.handleDeleteOption}
+          handleDeleteOption={this.handleDeleteOption}
         />
         <AddOption handleAddOption={this.handleAddOption} />
       </div>
@@ -84,7 +107,7 @@ const Header = props => {
 //   }
 // }
 
-const Action = (props) => {
+const Action = props => {
   return (
     <div>
       <button disabled={!props.hasOptions} onClick={props.handlePick}>
@@ -109,23 +132,23 @@ const Action = (props) => {
 //   }
 // }
 
-const Options = (props) => {
-    return (
-        <div>
-          <button onClick={props.handleDeleteOptions}>Remove All </button>
-          <ol>
-            {" "}
-            Here are your options
-            {props.options.map(option => (
-              <Option 
-              key={option} 
-              textValue={option}
-              handleDeleteOption={props.handleDeleteOption} />
-            ))}
-          </ol>
-        </div>
-      );
-}
+const Options = props => {
+  return (
+    <div>
+      <button onClick={props.handleDeleteOptions}>Remove All </button>
+      <ol>
+        {props.options.length == 0 && <p>Please add an option to begin </p>}
+        {props.options.map(option => (
+          <Option
+            key={option}
+            textValue={option}
+            handleDeleteOption={props.handleDeleteOption}
+          />
+        ))}
+      </ol>
+    </div>
+  );
+};
 
 // class Options extends React.Component {
 //   render() {
@@ -144,16 +167,21 @@ const Options = (props) => {
 //   }
 // }
 
-const Option = (props) => {
-    return (
-      <div>
-        {props.textValue}
-        <button onClick={(e) => {
-          props.handleDeleteOption(props.textValue)
-        }}> Remove Item</button>
-      </div>
-    )
-}
+const Option = props => {
+  return (
+    <div>
+      {props.textValue}
+      <button
+        onClick={e => {
+          props.handleDeleteOption(props.textValue);
+        }}
+      >
+        {" "}
+        Remove Item
+      </button>
+    </div>
+  );
+};
 
 // class Option extends React.Component {
 //   render() {
@@ -164,6 +192,8 @@ const Option = (props) => {
 class AddOption extends React.Component {
   constructor(props) {
     super(props);
+    // Form ile ilgili işlemleri component in kendisinde yapmak daha mantıklıymış.
+    // Bundan dolayı addOptionAction methodunu constructor da çağırıyoruz
     this.addOptionAction = this.addOptionAction.bind(this);
 
     this.state = {
@@ -176,6 +206,11 @@ class AddOption extends React.Component {
     let optionValue = e.target.elements.txtOption.value;
     let error = this.props.handleAddOption(optionValue);
     this.setState(() => ({ error }));
+   
+   // Eğer componentde herhangi bir hata yoksa, txtOption text kutusunun iceriğini otomatik olarak boşalt
+    if (!error) {
+      e.target.elements.txtOption.value = "";
+    }
   }
 
   render() {
