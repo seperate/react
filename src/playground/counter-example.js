@@ -10,6 +10,22 @@ class Counter extends React.Component {
         }
     }
 
+    componentDidMount(){
+        let lastValue = parseInt(JSON.parse(localStorage.getItem('lastCount')),10);
+        console.log('Component Mount : ' + lastValue)
+        this.setState(() => {
+           return{
+            count : lastValue
+           } 
+        })
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        let countValue = parseInt(JSON.stringify(this.state.count),10);
+        console.log('Storing Value : ' + countValue);
+        localStorage.setItem("lastCount",countValue);
+    }
+
     handleAddOne() {
         this.setState((prevState) => {
             return {
